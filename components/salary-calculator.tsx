@@ -111,122 +111,139 @@ export function SalaryCalculator() {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto px-4">
-      <div className="mb-8 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-3">Salary Calculator</h1>
-        <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-          Calculate your take-home salary with Tanzania's NSSF and P.A.Y.E deductions
-        </p>
-      </div>
+    <div className="min-h-screen flex flex-col bg-background px-4 py-6 sm:px-6 sm:py-8 md:px-8 lg:p-12">
+      <div className="w-full max-w-2xl mx-auto flex-1 flex flex-col">
+        {/* Header Section */}
+        <div className="mb-6 sm:mb-8 text-center">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-2 sm:mb-3">
+            Salary Calculator
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground px-2">
+            Calculate your take-home salary with Tanzania's NSSF and P.A.Y.E deductions
+          </p>
+        </div>
 
-      <Card className="border border-border shadow-lg overflow-hidden">
-        <CardHeader className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground pb-8 pt-8">
-          <div className="space-y-2">
-            <CardTitle className="text-2xl font-bold">Calculate Your Salary</CardTitle>
-            <CardDescription className="text-primary-foreground/85 text-base">
-              Choose your calculation method and enter the amount
-            </CardDescription>
-          </div>
-        </CardHeader>
+        {/* Main Card */}
+        <Card className="border border-border shadow-lg overflow-hidden flex-1 flex flex-col">
+          <CardHeader className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground pb-6 pt-6 sm:pb-8 sm:pt-8">
+            <div className="space-y-1 sm:space-y-2">
+              <CardTitle className="text-xl sm:text-2xl font-bold">Calculate Your Salary</CardTitle>
+              <CardDescription className="text-primary-foreground/85 text-xs sm:text-sm">
+                Choose your calculation method and enter the amount
+              </CardDescription>
+            </div>
+          </CardHeader>
 
-        <CardContent className="pt-8 space-y-6">
-          <div className="grid grid-cols-2 gap-3 p-1 bg-muted rounded-lg">
-            <button
-              onClick={() => {
-                setCalculationMode("gross")
-                setResults(null)
-                setNetSalary("")
-              }}
-              className={`py-3 px-4 rounded-md font-semibold text-sm transition-all duration-200 ${
-                calculationMode === "gross"
-                  ? "bg-primary text-primary-foreground shadow-md scale-100"
-                  : "bg-transparent text-muted-foreground hover:text-foreground"
-              }`}
+          <CardContent className="pt-6 sm:pt-8 space-y-6 flex-1 flex flex-col">
+            {/* Toggle Buttons */}
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 p-1 bg-muted rounded-lg">
+              <button
+                onClick={() => {
+                  setCalculationMode("gross")
+                  setResults(null)
+                  setNetSalary("")
+                }}
+                className={`py-2.5 sm:py-3 px-3 sm:px-4 rounded-md font-semibold text-xs sm:text-sm transition-all duration-200 ${
+                  calculationMode === "gross"
+                    ? "bg-primary text-primary-foreground shadow-md scale-100"
+                    : "bg-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Gross to Net
+              </button>
+              <button
+                onClick={() => {
+                  setCalculationMode("net")
+                  setResults(null)
+                  setGrossSalary("")
+                }}
+                className={`py-2.5 sm:py-3 px-3 sm:px-4 rounded-md font-semibold text-xs sm:text-sm transition-all duration-200 ${
+                  calculationMode === "net"
+                    ? "bg-primary text-primary-foreground shadow-md scale-100"
+                    : "bg-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Net to Gross
+              </button>
+            </div>
+
+            {/* Input Section */}
+            <div className="space-y-2 sm:space-y-3">
+              {calculationMode === "gross" ? (
+                <>
+                  <label className="block text-xs sm:text-sm font-semibold text-foreground">
+                    Gross Salary (TZS)
+                    <span className="text-muted-foreground font-normal ml-1 sm:ml-2 text-xs sm:text-xs">
+                      Amount before deductions
+                    </span>
+                  </label>
+                  <Input
+                    type="text"
+                    placeholder="e.g., 2,500,000"
+                    value={grossSalary}
+                    onChange={handleGrossChange}
+                    onKeyDown={handleKeyPress}
+                    className="h-12 sm:h-14 text-base sm:text-lg border-border focus:ring-2 focus:ring-accent focus:border-transparent"
+                  />
+                </>
+              ) : (
+                <>
+                  <label className="block text-xs sm:text-sm font-semibold text-foreground">
+                    Net Salary (TZS)
+                    <span className="text-muted-foreground font-normal ml-1 sm:ml-2 text-xs sm:text-xs">
+                      Amount after deductions
+                    </span>
+                  </label>
+                  <Input
+                    type="text"
+                    placeholder="e.g., 2,000,000"
+                    value={netSalary}
+                    onChange={handleNetChange}
+                    onKeyDown={handleKeyPress}
+                    className="h-12 sm:h-14 text-base sm:text-lg border-border focus:ring-2 focus:ring-accent focus:border-transparent"
+                  />
+                </>
+              )}
+            </div>
+
+            {/* Calculate Button */}
+            <Button
+              onClick={handleCalculate}
+              className="w-full h-12 sm:h-14 text-sm sm:text-base font-semibold bg-gradient-to-r from-accent to-accent/80 hover:from-accent/90 hover:to-accent/70 text-white shadow-md transition-all duration-200"
             >
-              Gross to Net
-            </button>
-            <button
-              onClick={() => {
-                setCalculationMode("net")
-                setResults(null)
-                setGrossSalary("")
-              }}
-              className={`py-3 px-4 rounded-md font-semibold text-sm transition-all duration-200 ${
-                calculationMode === "net"
-                  ? "bg-primary text-primary-foreground shadow-md scale-100"
-                  : "bg-transparent text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Net to Gross
-            </button>
-          </div>
+              Calculate Salary
+            </Button>
 
-          <div className="space-y-3">
-            {calculationMode === "gross" ? (
-              <>
-                <label className="block text-sm font-semibold text-foreground">
-                  Gross Salary (TZS)
-                  <span className="text-muted-foreground font-normal ml-2">Amount before deductions</span>
-                </label>
-                <Input
-                  type="text"
-                  placeholder="e.g., 2,500,000"
-                  value={grossSalary}
-                  onChange={handleGrossChange}
-                  onKeyDown={handleKeyPress}
-                  className="h-14 text-lg border-border focus:ring-2 focus:ring-accent focus:border-transparent"
-                />
-              </>
-            ) : (
-              <>
-                <label className="block text-sm font-semibold text-foreground">
-                  Net Salary (TZS)
-                  <span className="text-muted-foreground font-normal ml-2">Amount after deductions</span>
-                </label>
-                <Input
-                  type="text"
-                  placeholder="e.g., 2,000,000"
-                  value={netSalary}
-                  onChange={handleNetChange}
-                  onKeyDown={handleKeyPress}
-                  className="h-14 text-lg border-border focus:ring-2 focus:ring-accent focus:border-transparent"
-                />
-              </>
+            {/* Results */}
+            {results && (
+              <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-border">
+                <h3 className="text-xs sm:text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4 sm:mb-6">
+                  Breakdown
+                </h3>
+                <ResultBreakdown results={results} />
+              </div>
             )}
-          </div>
+          </CardContent>
+        </Card>
 
-          <Button
-            onClick={handleCalculate}
-            className="w-full h-14 text-base font-semibold bg-gradient-to-r from-accent to-accent/80 hover:from-accent/90 hover:to-accent/70 text-white shadow-md transition-all duration-200"
-          >
-            Calculate Salary
-          </Button>
-
-          {results && (
-            <div className="mt-8 pt-8 border-t border-border">
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">Breakdown</h3>
-              <ResultBreakdown results={results} />
+        {/* Info Card */}
+        <Card className="mt-4 sm:mt-6 border border-border shadow-sm bg-card/40 backdrop-blur-sm">
+          <CardContent className="pt-5 sm:pt-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div className="space-y-1">
+                <p className="text-xs sm:text-sm font-semibold text-foreground">NSSF Contribution</p>
+                <p className="text-xl sm:text-2xl font-bold text-accent">10%</p>
+                <p className="text-xs text-muted-foreground">Of gross salary</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs sm:text-sm font-semibold text-foreground">P.A.Y.E Tax</p>
+                <p className="text-xl sm:text-2xl font-bold text-primary">Progressive</p>
+                <p className="text-xs text-muted-foreground">Based on income brackets</p>
+              </div>
             </div>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card className="mt-6 border border-border shadow-sm bg-card/40 backdrop-blur-sm">
-        <CardContent className="pt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-foreground">NSSF Contribution</p>
-              <p className="text-2xl font-bold text-accent">10%</p>
-              <p className="text-xs text-muted-foreground">Of gross salary</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-foreground">P.A.Y.E Tax</p>
-              <p className="text-2xl font-bold text-primary">Progressive</p>
-              <p className="text-xs text-muted-foreground">Based on income brackets</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
